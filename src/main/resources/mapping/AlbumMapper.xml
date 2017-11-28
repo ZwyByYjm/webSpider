@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.webSpider.dao.AlbumMapper" >
+  <resultMap id="BaseResultMap" type="com.webSpider.pojo.Album" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="albumid" property="albumid" jdbcType="VARCHAR" />
+    <result column="albumname" property="albumname" jdbcType="VARCHAR" />
+    <result column="composerid" property="composerid" jdbcType="VARCHAR" />
+    <result column="createdtime" property="createdtime" jdbcType="DATE" />
+    <result column="introduction" property="introduction" jdbcType="VARCHAR" />
+    <result column="followedcount" property="followedcount" jdbcType="INTEGER" />
+    <result column="musiccount" property="musiccount" jdbcType="INTEGER" />
+    <result column="playcount" property="playcount" jdbcType="INTEGER" />
+    <result column="commentcount" property="commentcount" jdbcType="INTEGER" />
+    <result column="forwardcount" property="forwardcount" jdbcType="INTEGER" />
+    <result column="ablumurl" property="ablumurl" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, albumid, albumname, composerid, createdtime, introduction, followedcount, musiccount, 
+    playcount, commentcount, forwardcount, ablumurl
+  </sql>
+
+  <!-- 根据albumid查询 -->
+  <select id="selectByAlbumId" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List"/>
+    from tb_album
+    where albumid = #{albumid}
+  </select>
+
+  <!--<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >-->
+    <!--select -->
+    <!--<include refid="Base_Column_List" />-->
+    <!--from tb_album-->
+    <!--where id = #{id,jdbcType=INTEGER}-->
+  <!--</select>-->
+  <!--<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >-->
+    <!--delete from tb_album-->
+    <!--where id = #{id,jdbcType=INTEGER}-->
+  <!--</delete>-->
+  <!--<insert id="insert" parameterType="com.webSpider.pojo.Album" >-->
+    <!--insert into tb_album (id, albumid, albumname, -->
+      <!--composerid, createdtime, introduction, -->
+      <!--followedcount, musiccount, playcount, -->
+      <!--commentcount, forwardcount, ablumurl-->
+      <!--)-->
+    <!--values (#{id,jdbcType=INTEGER}, #{albumid,jdbcType=VARCHAR}, #{albumname,jdbcType=VARCHAR}, -->
+      <!--#{composerid,jdbcType=VARCHAR}, #{createdtime,jdbcType=DATE}, #{introduction,jdbcType=VARCHAR}, -->
+      <!--#{followedcount,jdbcType=INTEGER}, #{musiccount,jdbcType=INTEGER}, #{playcount,jdbcType=INTEGER}, -->
+      <!--#{commentcount,jdbcType=INTEGER}, #{forwardcount,jdbcType=INTEGER}, #{ablumurl,jdbcType=VARCHAR}-->
+      <!--)-->
+  <!--</insert>-->
+  <!--<insert id="insertSelective" parameterType="com.webSpider.pojo.Album" >-->
+    <!--insert into tb_album-->
+    <!--<trim prefix="(" suffix=")" suffixOverrides="," >-->
+      <!--<if test="id != null" >-->
+        <!--id,-->
+      <!--</if>-->
+      <!--<if test="albumid != null" >-->
+        <!--albumid,-->
+      <!--</if>-->
+      <!--<if test="albumname != null" >-->
+        <!--albumname,-->
+      <!--</if>-->
+      <!--<if test="composerid != null" >-->
+        <!--composerid,-->
+      <!--</if>-->
+      <!--<if test="createdtime != null" >-->
+        <!--createdtime,-->
+      <!--</if>-->
+      <!--<if test="introduction != null" >-->
+        <!--introduction,-->
+      <!--</if>-->
+      <!--<if test="followedcount != null" >-->
+        <!--followedcount,-->
+      <!--</if>-->
+      <!--<if test="musiccount != null" >-->
+        <!--musiccount,-->
+      <!--</if>-->
+      <!--<if test="playcount != null" >-->
+        <!--playcount,-->
+      <!--</if>-->
+      <!--<if test="commentcount != null" >-->
+        <!--commentcount,-->
+      <!--</if>-->
+      <!--<if test="forwardcount != null" >-->
+        <!--forwardcount,-->
+      <!--</if>-->
+      <!--<if test="ablumurl != null" >-->
+        <!--ablumurl,-->
+      <!--</if>-->
+    <!--</trim>-->
+    <!--<trim prefix="values (" suffix=")" suffixOverrides="," >-->
+      <!--<if test="id != null" >-->
+        <!--#{id,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="albumid != null" >-->
+        <!--#{albumid,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="albumname != null" >-->
+        <!--#{albumname,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="composerid != null" >-->
+        <!--#{composerid,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="createdtime != null" >-->
+        <!--#{createdtime,jdbcType=DATE},-->
+      <!--</if>-->
+      <!--<if test="introduction != null" >-->
+        <!--#{introduction,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="followedcount != null" >-->
+        <!--#{followedcount,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="musiccount != null" >-->
+        <!--#{musiccount,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="playcount != null" >-->
+        <!--#{playcount,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="commentcount != null" >-->
+        <!--#{commentcount,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="forwardcount != null" >-->
+        <!--#{forwardcount,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="ablumurl != null" >-->
+        <!--#{ablumurl,jdbcType=VARCHAR},-->
+      <!--</if>-->
+    <!--</trim>-->
+  <!--</insert>-->
+  <!--<update id="updateByPrimaryKeySelective" parameterType="com.webSpider.pojo.Album" >-->
+    <!--update tb_album-->
+    <!--<set >-->
+      <!--<if test="albumid != null" >-->
+        <!--albumid = #{albumid,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="albumname != null" >-->
+        <!--albumname = #{albumname,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="composerid != null" >-->
+        <!--composerid = #{composerid,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="createdtime != null" >-->
+        <!--createdtime = #{createdtime,jdbcType=DATE},-->
+      <!--</if>-->
+      <!--<if test="introduction != null" >-->
+        <!--introduction = #{introduction,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="followedcount != null" >-->
+        <!--followedcount = #{followedcount,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="musiccount != null" >-->
+        <!--musiccount = #{musiccount,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="playcount != null" >-->
+        <!--playcount = #{playcount,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="commentcount != null" >-->
+        <!--commentcount = #{commentcount,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="forwardcount != null" >-->
+        <!--forwardcount = #{forwardcount,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="ablumurl != null" >-->
+        <!--ablumurl = #{ablumurl,jdbcType=VARCHAR},-->
+      <!--</if>-->
+    <!--</set>-->
+    <!--where id = #{id,jdbcType=INTEGER}-->
+  <!--</update>-->
+  <!--<update id="updateByPrimaryKey" parameterType="com.webSpider.pojo.Album" >-->
+    <!--update tb_album-->
+    <!--set albumid = #{albumid,jdbcType=VARCHAR},-->
+      <!--albumname = #{albumname,jdbcType=VARCHAR},-->
+      <!--composerid = #{composerid,jdbcType=VARCHAR},-->
+      <!--createdtime = #{createdtime,jdbcType=DATE},-->
+      <!--introduction = #{introduction,jdbcType=VARCHAR},-->
+      <!--followedcount = #{followedcount,jdbcType=INTEGER},-->
+      <!--musiccount = #{musiccount,jdbcType=INTEGER},-->
+      <!--playcount = #{playcount,jdbcType=INTEGER},-->
+      <!--commentcount = #{commentcount,jdbcType=INTEGER},-->
+      <!--forwardcount = #{forwardcount,jdbcType=INTEGER},-->
+      <!--ablumurl = #{ablumurl,jdbcType=VARCHAR}-->
+    <!--where id = #{id,jdbcType=INTEGER}-->
+  <!--</update>-->
+</mapper>

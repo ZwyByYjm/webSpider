@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.webSpider.dao.ComposerInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.webSpider.pojo.ComposerInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="composerid" property="composerid" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="introduction" property="introduction" jdbcType="VARCHAR" />
+    <result column="hotmusicname" property="hotmusicname" jdbcType="VARCHAR" />
+    <result column="composerurl" property="composerurl" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, composerid, name, introduction, hotmusicname, composerurl
+  </sql>
+
+
+  <!-- 根据composerid查询 -->
+  <select id="selectByComposerId" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List"/>
+    from tb_composerinfo
+    where composerid = #{composerid}
+  </select>
+  <!--<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >-->
+    <!--select -->
+    <!--<include refid="Base_Column_List" />-->
+    <!--from tb_composerinfo-->
+    <!--where id = #{id,jdbcType=INTEGER}-->
+  <!--</select>-->
+  <!--<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >-->
+    <!--delete from tb_composerinfo-->
+    <!--where id = #{id,jdbcType=INTEGER}-->
+  <!--</delete>-->
+  <!--<insert id="insert" parameterType="com.webSpider.pojo.ComposerInfo" >-->
+    <!--insert into tb_composerinfo (id, composerid, name, -->
+      <!--introduction, hotmusicname, composerurl-->
+      <!--)-->
+    <!--values (#{id,jdbcType=INTEGER}, #{composerid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, -->
+      <!--#{introduction,jdbcType=VARCHAR}, #{hotmusicname,jdbcType=VARCHAR}, #{composerurl,jdbcType=VARCHAR}-->
+      <!--)-->
+  <!--</insert>-->
+  <!--<insert id="insertSelective" parameterType="com.webSpider.pojo.ComposerInfo" >-->
+    <!--insert into tb_composerinfo-->
+    <!--<trim prefix="(" suffix=")" suffixOverrides="," >-->
+      <!--<if test="id != null" >-->
+        <!--id,-->
+      <!--</if>-->
+      <!--<if test="composerid != null" >-->
+        <!--composerid,-->
+      <!--</if>-->
+      <!--<if test="name != null" >-->
+        <!--name,-->
+      <!--</if>-->
+      <!--<if test="introduction != null" >-->
+        <!--introduction,-->
+      <!--</if>-->
+      <!--<if test="hotmusicname != null" >-->
+        <!--hotmusicname,-->
+      <!--</if>-->
+      <!--<if test="composerurl != null" >-->
+        <!--composerurl,-->
+      <!--</if>-->
+    <!--</trim>-->
+    <!--<trim prefix="values (" suffix=")" suffixOverrides="," >-->
+      <!--<if test="id != null" >-->
+        <!--#{id,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="composerid != null" >-->
+        <!--#{composerid,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="name != null" >-->
+        <!--#{name,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="introduction != null" >-->
+        <!--#{introduction,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="hotmusicname != null" >-->
+        <!--#{hotmusicname,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="composerurl != null" >-->
+        <!--#{composerurl,jdbcType=VARCHAR},-->
+      <!--</if>-->
+    <!--</trim>-->
+  <!--</insert>-->
+  <!--<update id="updateByPrimaryKeySelective" parameterType="com.webSpider.pojo.ComposerInfo" >-->
+    <!--update tb_composerinfo-->
+    <!--<set >-->
+      <!--<if test="composerid != null" >-->
+        <!--composerid = #{composerid,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="name != null" >-->
+        <!--name = #{name,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="introduction != null" >-->
+        <!--introduction = #{introduction,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="hotmusicname != null" >-->
+        <!--hotmusicname = #{hotmusicname,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="composerurl != null" >-->
+        <!--composerurl = #{composerurl,jdbcType=VARCHAR},-->
+      <!--</if>-->
+    <!--</set>-->
+    <!--where id = #{id,jdbcType=INTEGER}-->
+  <!--</update>-->
+  <!--<update id="updateByPrimaryKey" parameterType="com.webSpider.pojo.ComposerInfo" >-->
+    <!--update tb_composerinfo-->
+    <!--set composerid = #{composerid,jdbcType=VARCHAR},-->
+      <!--name = #{name,jdbcType=VARCHAR},-->
+      <!--introduction = #{introduction,jdbcType=VARCHAR},-->
+      <!--hotmusicname = #{hotmusicname,jdbcType=VARCHAR},-->
+      <!--composerurl = #{composerurl,jdbcType=VARCHAR}-->
+    <!--where id = #{id,jdbcType=INTEGER}-->
+  <!--</update>-->
+</mapper>

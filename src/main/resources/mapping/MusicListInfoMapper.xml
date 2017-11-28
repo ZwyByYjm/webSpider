@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.webSpider.dao.MusicListInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.webSpider.pojo.MusicListInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="musiclistid" property="musiclistid" jdbcType="VARCHAR" />
+    <result column="musiclistname" property="musiclistname" jdbcType="VARCHAR" />
+    <result column="createrid" property="createrid" jdbcType="VARCHAR" />
+    <result column="tag" property="tag" jdbcType="VARCHAR" />
+    <result column="introduction" property="introduction" jdbcType="VARCHAR" />
+    <result column="followedcount" property="followedcount" jdbcType="INTEGER" />
+    <result column="musiccount" property="musiccount" jdbcType="INTEGER" />
+    <result column="playcount" property="playcount" jdbcType="INTEGER" />
+    <result column="commentcount" property="commentcount" jdbcType="INTEGER" />
+    <result column="forwardcount" property="forwardcount" jdbcType="INTEGER" />
+    <result column="listurl" property="listurl" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, musiclistid, musiclistname, createrid, tag, introduction, followedcount, musiccount,
+    playcount, commentcount, forwardcount, listurl
+  </sql>
+  <!-- 根据musiclistid查询 -->
+  <select id="selectByMusicListId" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List"/>
+    from tb_musiclistinfo t
+    where t.musiclistid = #{musiclistid}
+  </select>
+
+
+  <!--<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >-->
+    <!--select -->
+    <!--<include refid="Base_Column_List" />-->
+    <!--from tb_musiclistinfo-->
+    <!--where id = #{id,jdbcType=INTEGER}-->
+  <!--</select>-->
+  <!--<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >-->
+    <!--delete from tb_musiclistinfo-->
+    <!--where id = #{id,jdbcType=INTEGER}-->
+  <!--</delete>-->
+  <!--<insert id="insert" parameterType="com.webSpider.pojo.MusicListInfo" >-->
+    <!--insert into tb_musiclistinfo (id, musiclistid, musiclistname, -->
+      <!--createrid, tag, introduction, -->
+      <!--followedcount, musiccount, playcount, -->
+      <!--commentcount, forwardcount, listurl-->
+      <!--)-->
+    <!--values (#{id,jdbcType=INTEGER}, #{musiclistid,jdbcType=VARCHAR}, #{musiclistname,jdbcType=VARCHAR}, -->
+      <!--#{createrid,jdbcType=VARCHAR}, #{tag,jdbcType=VARCHAR}, #{introduction,jdbcType=VARCHAR}, -->
+      <!--#{followedcount,jdbcType=INTEGER}, #{musiccount,jdbcType=INTEGER}, #{playcount,jdbcType=INTEGER}, -->
+      <!--#{commentcount,jdbcType=INTEGER}, #{forwardcount,jdbcType=INTEGER}, #{listurl,jdbcType=VARCHAR}-->
+      <!--)-->
+  <!--</insert>-->
+  <!--<insert id="insertSelective" parameterType="com.webSpider.pojo.MusicListInfo" >-->
+    <!--insert into tb_musiclistinfo-->
+    <!--<trim prefix="(" suffix=")" suffixOverrides="," >-->
+      <!--<if test="id != null" >-->
+        <!--id,-->
+      <!--</if>-->
+      <!--<if test="musiclistid != null" >-->
+        <!--musiclistid,-->
+      <!--</if>-->
+      <!--<if test="musiclistname != null" >-->
+        <!--musiclistname,-->
+      <!--</if>-->
+      <!--<if test="createrid != null" >-->
+        <!--createrid,-->
+      <!--</if>-->
+      <!--<if test="tag != null" >-->
+        <!--tag,-->
+      <!--</if>-->
+      <!--<if test="introduction != null" >-->
+        <!--introduction,-->
+      <!--</if>-->
+      <!--<if test="followedcount != null" >-->
+        <!--followedcount,-->
+      <!--</if>-->
+      <!--<if test="musiccount != null" >-->
+        <!--musiccount,-->
+      <!--</if>-->
+      <!--<if test="playcount != null" >-->
+        <!--playcount,-->
+      <!--</if>-->
+      <!--<if test="commentcount != null" >-->
+        <!--commentcount,-->
+      <!--</if>-->
+      <!--<if test="forwardcount != null" >-->
+        <!--forwardcount,-->
+      <!--</if>-->
+      <!--<if test="listurl != null" >-->
+        <!--listurl,-->
+      <!--</if>-->
+    <!--</trim>-->
+    <!--<trim prefix="values (" suffix=")" suffixOverrides="," >-->
+      <!--<if test="id != null" >-->
+        <!--#{id,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="musiclistid != null" >-->
+        <!--#{musiclistid,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="musiclistname != null" >-->
+        <!--#{musiclistname,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="createrid != null" >-->
+        <!--#{createrid,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="tag != null" >-->
+        <!--#{tag,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="introduction != null" >-->
+        <!--#{introduction,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="followedcount != null" >-->
+        <!--#{followedcount,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="musiccount != null" >-->
+        <!--#{musiccount,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="playcount != null" >-->
+        <!--#{playcount,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="commentcount != null" >-->
+        <!--#{commentcount,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="forwardcount != null" >-->
+        <!--#{forwardcount,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="listurl != null" >-->
+        <!--#{listurl,jdbcType=VARCHAR},-->
+      <!--</if>-->
+    <!--</trim>-->
+  <!--</insert>-->
+  <!--<update id="updateByPrimaryKeySelective" parameterType="com.webSpider.pojo.MusicListInfo" >-->
+    <!--update tb_musiclistinfo-->
+    <!--<set >-->
+      <!--<if test="musiclistid != null" >-->
+        <!--musiclistid = #{musiclistid,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="musiclistname != null" >-->
+        <!--musiclistname = #{musiclistname,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="createrid != null" >-->
+        <!--createrid = #{createrid,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="tag != null" >-->
+        <!--tag = #{tag,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="introduction != null" >-->
+        <!--introduction = #{introduction,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="followedcount != null" >-->
+        <!--followedcount = #{followedcount,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="musiccount != null" >-->
+        <!--musiccount = #{musiccount,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="playcount != null" >-->
+        <!--playcount = #{playcount,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="commentcount != null" >-->
+        <!--commentcount = #{commentcount,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="forwardcount != null" >-->
+        <!--forwardcount = #{forwardcount,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="listurl != null" >-->
+        <!--listurl = #{listurl,jdbcType=VARCHAR},-->
+      <!--</if>-->
+    <!--</set>-->
+    <!--where id = #{id,jdbcType=INTEGER}-->
+  <!--</update>-->
+  <!--<update id="updateByPrimaryKey" parameterType="com.webSpider.pojo.MusicListInfo" >-->
+    <!--update tb_musiclistinfo-->
+    <!--set musiclistid = #{musiclistid,jdbcType=VARCHAR},-->
+      <!--musiclistname = #{musiclistname,jdbcType=VARCHAR},-->
+      <!--createrid = #{createrid,jdbcType=VARCHAR},-->
+      <!--tag = #{tag,jdbcType=VARCHAR},-->
+      <!--introduction = #{introduction,jdbcType=VARCHAR},-->
+      <!--followedcount = #{followedcount,jdbcType=INTEGER},-->
+      <!--musiccount = #{musiccount,jdbcType=INTEGER},-->
+      <!--playcount = #{playcount,jdbcType=INTEGER},-->
+      <!--commentcount = #{commentcount,jdbcType=INTEGER},-->
+      <!--forwardcount = #{forwardcount,jdbcType=INTEGER},-->
+      <!--listurl = #{listurl,jdbcType=VARCHAR}-->
+    <!--where id = #{id,jdbcType=INTEGER}-->
+  <!--</update>-->
+</mapper>

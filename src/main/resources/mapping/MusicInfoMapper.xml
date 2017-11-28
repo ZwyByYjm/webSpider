@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.webSpider.dao.MusicInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.webSpider.pojo.MusicInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="musicid" property="musicid" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="createdtime" property="createdtime" jdbcType="DATE" />
+    <result column="composerid" property="composerid" jdbcType="VARCHAR" />
+    <result column="commentcount" property="commentcount" jdbcType="INTEGER" />
+    <result column="tag" property="tag" jdbcType="VARCHAR" />
+    <result column="emotionid" property="emotionid" jdbcType="INTEGER" />
+    <result column="styleid" property="styleid" jdbcType="INTEGER" />
+    <result column="languageid" property="languageid" jdbcType="INTEGER" />
+    <result column="albumid" property="albumid" jdbcType="VARCHAR" />
+    <result column="musicurl" property="musicurl" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, musicid, name, createdtime, composerid, commentcount, tag, emotionid, styleid, 
+    languageid, albumid, musicurl
+  </sql>
+
+
+  <!-- 根据musicid查询 -->
+  <select id="selectByMusicId" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List"/>
+    from tb_musicinfo
+    where musicid = #{musicid}
+  </select>
+
+  <!--<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >-->
+    <!--select -->
+    <!--<include refid="Base_Column_List" />-->
+    <!--from tb_musicinfo-->
+    <!--where id = #{id,jdbcType=INTEGER}-->
+  <!--</select>-->
+  <!--<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >-->
+    <!--delete from tb_musicinfo-->
+    <!--where id = #{id,jdbcType=INTEGER}-->
+  <!--</delete>-->
+  <!--<insert id="insert" parameterType="com.webSpider.pojo.MusicInfo" >-->
+    <!--insert into tb_musicinfo (id, musicid, name, -->
+      <!--createdtime, composerid, commentcount, -->
+      <!--tag, emotionid, styleid, -->
+      <!--languageid, albumid, musicurl-->
+      <!--)-->
+    <!--values (#{id,jdbcType=INTEGER}, #{musicid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, -->
+      <!--#{createdtime,jdbcType=DATE}, #{composerid,jdbcType=VARCHAR}, #{commentcount,jdbcType=INTEGER},-->
+      <!--#{tag,jdbcType=VARCHAR}, #{emotionid,jdbcType=INTEGER}, #{styleid,jdbcType=INTEGER}, -->
+      <!--#{languageid,jdbcType=INTEGER}, #{albumid,jdbcType=VARCHAR}, #{musicurl,jdbcType=VARCHAR}-->
+      <!--)-->
+  <!--</insert>-->
+  <!--<insert id="insertSelective" parameterType="com.webSpider.pojo.MusicInfo" >-->
+    <!--insert into tb_musicinfo-->
+    <!--<trim prefix="(" suffix=")" suffixOverrides="," >-->
+      <!--<if test="id != null" >-->
+        <!--id,-->
+      <!--</if>-->
+      <!--<if test="musicid != null" >-->
+        <!--musicid,-->
+      <!--</if>-->
+      <!--<if test="name != null" >-->
+        <!--name,-->
+      <!--</if>-->
+      <!--<if test="createdtime != null" >-->
+        <!--createdtime,-->
+      <!--</if>-->
+      <!--<if test="composerid != null" >-->
+        <!--composerid,-->
+      <!--</if>-->
+      <!--<if test="commentcount != null" >-->
+        <!--commentcount,-->
+      <!--</if>-->
+      <!--<if test="tag != null" >-->
+        <!--tag,-->
+      <!--</if>-->
+      <!--<if test="emotionid != null" >-->
+        <!--emotionid,-->
+      <!--</if>-->
+      <!--<if test="styleid != null" >-->
+        <!--styleid,-->
+      <!--</if>-->
+      <!--<if test="languageid != null" >-->
+        <!--languageid,-->
+      <!--</if>-->
+      <!--<if test="albumid != null" >-->
+        <!--albumid,-->
+      <!--</if>-->
+      <!--<if test="musicurl != null" >-->
+        <!--musicurl,-->
+      <!--</if>-->
+    <!--</trim>-->
+    <!--<trim prefix="values (" suffix=")" suffixOverrides="," >-->
+      <!--<if test="id != null" >-->
+        <!--#{id,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="musicid != null" >-->
+        <!--#{musicid,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="name != null" >-->
+        <!--#{name,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="createdtime != null" >-->
+        <!--#{createdtime,jdbcType=DATE},-->
+      <!--</if>-->
+      <!--<if test="composerid != null" >-->
+        <!--#{composerid,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="commentcount != null" >-->
+        <!--#{commentcount,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="tag != null" >-->
+        <!--#{tag,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="emotionid != null" >-->
+        <!--#{emotionid,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="styleid != null" >-->
+        <!--#{styleid,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="languageid != null" >-->
+        <!--#{languageid,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="albumid != null" >-->
+        <!--#{albumid,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="musicurl != null" >-->
+        <!--#{musicurl,jdbcType=VARCHAR},-->
+      <!--</if>-->
+    <!--</trim>-->
+  <!--</insert>-->
+  <!--<update id="updateByPrimaryKeySelective" parameterType="com.webSpider.pojo.MusicInfo" >-->
+    <!--update tb_musicinfo-->
+    <!--<set >-->
+      <!--<if test="musicid != null" >-->
+        <!--musicid = #{musicid,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="name != null" >-->
+        <!--name = #{name,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="createdtime != null" >-->
+        <!--createdtime = #{createdtime,jdbcType=DATE},-->
+      <!--</if>-->
+      <!--<if test="composerid != null" >-->
+        <!--composerid = #{composerid,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="commentcount != null" >-->
+        <!--commentcount = #{commentcount,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="tag != null" >-->
+        <!--tag = #{tag,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="emotionid != null" >-->
+        <!--emotionid = #{emotionid,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="styleid != null" >-->
+        <!--styleid = #{styleid,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="languageid != null" >-->
+        <!--languageid = #{languageid,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="albumid != null" >-->
+        <!--albumid = #{albumid,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="musicurl != null" >-->
+        <!--musicurl = #{musicurl,jdbcType=VARCHAR},-->
+      <!--</if>-->
+    <!--</set>-->
+    <!--where id = #{id,jdbcType=INTEGER}-->
+  <!--</update>-->
+  <!--<update id="updateByPrimaryKey" parameterType="com.webSpider.pojo.MusicInfo" >-->
+    <!--update tb_musicinfo-->
+    <!--set musicid = #{musicid,jdbcType=VARCHAR},-->
+      <!--name = #{name,jdbcType=VARCHAR},-->
+      <!--createdtime = #{createdtime,jdbcType=DATE},-->
+      <!--composerid = #{composerid,jdbcType=VARCHAR},-->
+      <!--commentcount = #{commentcount,jdbcType=INTEGER},-->
+      <!--tag = #{tag,jdbcType=VARCHAR},-->
+      <!--emotionid = #{emotionid,jdbcType=INTEGER},-->
+      <!--styleid = #{styleid,jdbcType=INTEGER},-->
+      <!--languageid = #{languageid,jdbcType=INTEGER},-->
+      <!--albumid = #{albumid,jdbcType=VARCHAR},-->
+      <!--musicurl = #{musicurl,jdbcType=VARCHAR}-->
+    <!--where id = #{id,jdbcType=INTEGER}-->
+  <!--</update>-->
+</mapper>
