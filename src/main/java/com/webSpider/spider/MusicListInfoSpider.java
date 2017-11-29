@@ -70,6 +70,7 @@ public class MusicListInfoSpider implements Crawler
                 .addUrl("http://music.163.com/discover/playlist/?cat=%E5%8D%8E%E8%AF%AD")
                 //.addUrl("http://www.douban.com/people/4400922/")
                 .addPipeline(musicListInfoPipeline)
+                //.setDownloader(new HttpClientDownloader())
                 .scheduler(new RedisScheduler(pool,Integer.parseInt(ConfigUtil.getProperty("redis", "redis.index")), QueueNameConstant.QUEUE_MUSICLIST_INFO))
                 .thread(1).start();
         return "spider begining！！！";
