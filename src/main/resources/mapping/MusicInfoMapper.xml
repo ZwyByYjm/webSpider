@@ -29,6 +29,32 @@
     where musicid = #{musicid}
   </select>
 
+  <update id="updateByTag" parameterType="java.lang.String" >
+  update tb_musicinfo
+  set  tag = #{tag}
+  where id IN (
+ 		SELECT
+ 			id
+ 		FROM
+ 			(
+ 				SELECT
+ 					a.id
+ 				FROM
+ 					tb_musicinfo a,
+ 					tb_musiclistinfo b,
+ 					tb_musiclist_music c
+ 				WHERE
+ 					b.tag = #{tag}
+ 				AND b.musiclistid = c.musiclistid
+ 				AND c.musicid = a.musicid
+ 			)
+ as a
+ 	)
+  </update>
+
+
+
+
   <!--<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >-->
     <!--select -->
     <!--<include refid="Base_Column_List" />-->

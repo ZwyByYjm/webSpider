@@ -34,6 +34,8 @@ public class MusicListInfoPipeline implements Pipeline
     @Autowired
     private UserInfoMapper userInfoMapper;
 
+
+
     @Override
     public void process(ResultItems resultItems, Task task)
     {

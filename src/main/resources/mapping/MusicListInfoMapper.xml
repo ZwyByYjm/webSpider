@@ -27,7 +27,12 @@
     where t.musiclistid = #{musiclistid}
   </select>
 
-
+  <!-- 根据musiclistid查询 -->
+  <select id="selectAllTag" resultMap="BaseResultMap">
+    select
+    tag
+    from tb_musiclistinfo
+  </select>
   <!--<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >-->
     <!--select -->
     <!--<include refid="Base_Column_List" />-->

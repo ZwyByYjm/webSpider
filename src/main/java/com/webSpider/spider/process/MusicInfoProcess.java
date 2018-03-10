@@ -4,26 +4,31 @@ package com.webSpider.spider.process;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.webSpider.pojo.*;
+import com.webSpider.pojo.Album;
+import com.webSpider.pojo.ComposerInfo;
+import com.webSpider.pojo.MusicInfo;
+import com.webSpider.pojo.UserInfo;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.http.HttpHost;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import us.codecraft.webmagic.Page;
-import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
 import utils.EncryptTools;
 import utils.FileUtils;
 
 import java.math.BigInteger;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 /**
  * @author 印佳明
  * @create 2017-10-26 19:59
  */
-public class MusicListInfoProcess implements PageProcessor
+public class MusicInfoProcess implements PageProcessor
 {
 
     public static final String COOKIE =
@@ -52,17 +57,6 @@ public class MusicListInfoProcess implements PageProcessor
             //new HttpHost("61.135.217.3", 80),//bj...
             new HttpHost("122.114.31.177", 808),//hnzj!!!!
     };
-
-    //public static final InetSocketAddress[] PROXY = new InetSocketAddress[]{
-    //        new InetSocketAddress("61.135.217.7", 80),
-    //        new InetSocketAddress("114.115.216.99", 80),
-    //        new InetSocketAddress("112.114.96.210", 8118),
-    //        new InetSocketAddress("101.68.73.54", 53281),
-    //        new InetSocketAddress("124.202.223.202", 8118),
-    //        new InetSocketAddress("123.126.32.102", 8080)
-    //};
-
-
     private Site site = Site.me().setRetryTimes(3).setCharset("UTF-8")
             .setUserAgent(AGENTS[new Random().nextInt(6)])
             .addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
@@ -90,8 +84,6 @@ public class MusicListInfoProcess implements PageProcessor
     @Override
     public void process(Page page)
     {
-        //System.out.println("proxy" + site.getHttpProxy().getHostName());
-        //System.out.println("proxy" + site.getHttpProxy().toHostString());
         try
         {
             site.setUserAgent(AGENTS[new Random().nextInt(5)])
@@ -105,119 +97,11 @@ public class MusicListInfoProcess implements PageProcessor
             e.printStackTrace();
         }
 
-        // 当前页面是图书列表页面
-        if (page.getUrl().regex("http://music\\.163\\.com/discover/playlist/\\S+").match())
-        {
-            processForMusicListList(page);
-        }
-        // 当前页面是图书详细信息页面
-        else if (page.getUrl()
-                .regex("http://music\\.163\\.com/playlist\\S+")
-                .match())
-        //else if(page.getUrl().toString().indexOf("http://music.163.com/playlist/?")>0)
-        {
-            processForMusicListInfo(page);
-        } else if (page.getUrl()
+         if (page.getUrl()
                 .regex("http://music\\.163\\.com/song\\S+")
                 .match())
-        //else if(page.getUrl().toString().indexOf("http://music.163.com/song?id=")>0)
         {
             processForMusicInfo(page);
-        }
-    }
-
-    /**
-     * @Date 2017/11/18 17:50
-     * 歌单列表  抽取歌单详细信息URL 获取下一页歌单列表URL
-     */
-    public void processForMusicListList(Page page)
-    {
-        // 下一页的Url page.getHtml().css("div.u-page").links().regex(".*/discover/playlist/\\?order=hot&cat =\\w+)").all()
-        String nextPageUrlXpath = "//a[@class='zbtn znxt']/@href";
-        // 如果当前页有数据 ，不会返回空，否则返回空
-        String hasContentXpath = "//div[@class='g-wrap p-pl f-pr']/ul/li";
-        // 获取歌单内容地址
-        String musicListUrlXpath = "//a[@class='msk']/@href";
-        // 获取标签
-        //String tag = page.getUrl().toString().split("/")[4];
-        List<String> musicListUrls = page.getHtml().xpath(musicListUrlXpath).all();
-        String nextPageUrl = page.getHtml().xpath(nextPageUrlXpath).toString().trim();
-        if (page.getHtml().xpath(hasContentXpath).all().size() > 0)
-        {
-            // 把歌单详细内容URL加入爬取队列
-            for (String musicListUrl : musicListUrls)
-            {
-                page.addTargetRequest(new Request(musicListUrl).setPriority(1));
-                //  .putExtra("tag", tag));
-                System.out.println("歌单列表-入列:" + musicListUrl);
-            }
-            // 把下一页歌单列表加入队列
-            page.addTargetRequest(new Request(nextPageUrl).setPriority(0));
-        }
-    }
-
-    /**
-     * @Date 2017/11/18 17:50
-     * 歌单详细信息
-     * id     musiclistid    musiclistname    createrid   tag    introduction    followedcount
-     * musiccount    playcount    commentcount    forwardcount    listurl
-     */
-    public void processForMusicListInfo(Page page)
-    {
-        System.out.println("******开始爬取歌单详细信息+" + page.getUrl().toString() + "+*******");
-        try
-        {
-            MusicListInfo musicListInfo = new MusicListInfo();
-            musicListInfo.setMusiclistid(page.getUrl().toString().split("=")[1].trim());
-            musicListInfo.setMusiclistname(page.getHtml().xpath("//div[@class='tit']/h2/text()").toString().trim());
-            musicListInfo.setCreaterid(page.getHtml().xpath("//span[@class='name']/a/@href").toString().split("=")[1].trim());
-            List<String> tags = page.getHtml().xpath("//div[@class='tags f-cb']/a/i/text()").all();//..
-            String tag = "";
-            for (int i = 0; i < tags.size(); i++)
-            {
-                if (i != (tags.size() - 1))
-                    tag += tags.get(i).trim() + "$";
-                else
-                    tag += tags.get(i).trim();
-            }
-            musicListInfo.setTag(tag);
-            musicListInfo.setIntroduction(page.getHtml().xpath("//p[@id='album-desc-more']/text()").toString().trim()
-                    .replace("<b>", "")
-                    .replace("</b>", "")
-                    .replace("\"", "")
-                    .replace("<br><br>", " ")
-                    .replace("<br>", " "));
-            musicListInfo.setFollowedcount(Integer.parseInt(page.getHtml()
-                    .xpath("//div[@id='content-operation']/a[@class='u-btni u-btni-fav ']/@data-count").toString().trim()));
-            musicListInfo.setMusiccount(Integer.parseInt(page.getHtml().xpath("//span[@id='playlist-track-count']/text()").toString().trim()));
-            musicListInfo.setPlaycount(Integer.parseInt(page.getHtml().xpath("//strong[@id='play-count']/text()").toString().trim()));
-            musicListInfo.setCommentcount(Integer.parseInt(page.getHtml().xpath("//span[@id='cnt_comment_count']/text()").toString().trim()));
-            musicListInfo.setListurl(page.getUrl().toString());
-            musicListInfo.setForwardcount(Integer.parseInt(page.getHtml()
-                    .xpath("//div[@id='content-operation']/a[@class='u-btni u-btni-share ']/@data-count").toString().trim()));
-
-            List<String> musicidUrlList = page.getHtml().css("div.n-songtb").links().regex(".*/song\\?id=.*").all();
-
-            List<MusicList2Music> musicList2MusicsList = new ArrayList<>();
-            for (String mucUrl : musicidUrlList)
-            {
-                MusicList2Music tempMusicLsit2Music = new MusicList2Music();
-                tempMusicLsit2Music.setMusiclistid(musicListInfo.getMusiclistid());
-                tempMusicLsit2Music.setMusicid(mucUrl.split("=")[1].trim());
-                musicList2MusicsList.add(tempMusicLsit2Music);
-
-                page.addTargetRequest(new Request(mucUrl).setPriority(2)
-                        .putExtra("tag", tag));
-            }
-
-            page.putField("musicList2MusicsList", musicList2MusicsList);
-            page.putField("musicListInfo", musicListInfo);
-
-        } catch (Exception e)
-        {
-            System.out.println("歌单详细信息XPath解析出现异常 " + page.getUrl() + new Date());
-            e.printStackTrace();
-            FileUtils.writeStrToFile(page.getUrl() + "\r\n", "E:\\ideawork\\webSpider\\src\\main\\resources\\musiclistinfo_error.txt");
         }
     }
 
@@ -230,7 +114,7 @@ public class MusicListInfoProcess implements PageProcessor
      */
     public void processForMusicInfo(Page page)
     {
-        System.out.println("******开始爬取歌曲详细信息 " + page.getUrl().toString() + " *******" + new Date());
+        System.out.println("******开始爬取歌曲详细信息+" + page.getUrl().toString() + "+*******");
         try
         {
             MusicInfo musicInfo = new MusicInfo();
@@ -243,31 +127,35 @@ public class MusicListInfoProcess implements PageProcessor
 
             List<String> artlistURLAndAblumURL = page.getHtml().xpath("//div[@class='cnt']/p/span/a/@href").all();
 
-            musicInfo.setComposerid(page.getHtml().xpath("//div[@class='cnt']/p/span/a/@href").toString().split("=")[1].trim());
-            composerInfo.setComposerid(page.getHtml().xpath("//div[@class='cnt']/p/span/a/@href").toString().split("=")[1].trim());
-            composerInfo.setName(page.getHtml().xpath("//div[@class='cnt']/p/span/@title").toString());
-            composerInfo.setComposerurl(page.getHtml().xpath("//div[@class='cnt']/p/span/a/@href").toString());
-
-            musicInfo.setAlbumid(page.getHtml().xpath("//div[@class='cnt']/p/a/@href").toString().split("=")[1]);
-            album.setAlbumid(page.getHtml().xpath("//div[@class='cnt']/p/a/@href").toString().split("=")[1]);
-            album.setAlbumname(page.getHtml().xpath("//div[@class='cnt']/p/a/text()").toString());
-            album.setAblumurl(page.getHtml().xpath("//div[@class='cnt']/p/a/@href").toString());
-
+            if (page.getHtml().xpath("//div[@class='cnt']/p/span/a/@href").toString() != null)
+            {
+                musicInfo.setComposerid(page.getHtml().xpath("//div[@class='cnt']/p/span/a/@href").toString().split("=")[1].trim());
+                composerInfo.setComposerid(page.getHtml().xpath("//div[@class='cnt']/p/span/a/@href").toString().split("=")[1].trim());
+                composerInfo.setName(page.getHtml().xpath("//div[@class='cnt']/p/span/@title").toString());
+                composerInfo.setComposerurl(page.getHtml().xpath("//div[@class='cnt']/p/span/a/@href").toString());
+            }
+            if(page.getHtml().xpath("//div[@class='cnt']/p/a/@href").toString() != null)
+            {
+                musicInfo.setAlbumid(page.getHtml().xpath("//div[@class='cnt']/p/a/@href").toString().split("=")[1]);
+                album.setAlbumid(page.getHtml().xpath("//div[@class='cnt']/p/a/@href").toString().split("=")[1]);
+                album.setAlbumname(page.getHtml().xpath("//div[@class='cnt']/p/a/text()").toString());
+                album.setAblumurl(page.getHtml().xpath("//div[@class='cnt']/p/a/@href").toString());
+            }
 
             //musicInfo.setTag(UnicodeUtil.unicodeToString(page.getRequest().getExtra("tag").toString()));
-            musicInfo.setTag(page.getRequest().getExtra("tag").toString());
+            musicInfo.setTag("-1");
             //System.out.println(page.getHtml().xpath("//span[@id='cnt_comment_count']").toString());
             int offset = 0;
             JSONObject jsonComment = commentAPI(musicInfo.getMusicid(), offset);
             int[] num = {1, 2, 3};
             if (jsonComment.getString("msg") == null)
             {
-                System.out.println(page.getUrl().toString() + " *****************获取评论中************** " + new Date());
+                System.out.println(page.getUrl().toString() + " *****************获取评论中**************");
                 musicInfo.setCommentcount(Integer.parseInt(jsonComment.getString("total")));
 
                 while (offset < 1001 && offset < musicInfo.getCommentcount())
                 {
-                    System.out.println(page.getUrl().toString() + " 获取评论：offset = " + offset + " 请稍等！！！" + new Date());
+                    System.out.println(page.getUrl().toString() + " 获取评论：offset = " + offset + " 请稍等！！！");
                     JSONArray comments = jsonComment.getJSONArray("comments");
                     for (int i = 0; i < comments.size(); i++)
                     {
@@ -280,7 +168,7 @@ public class MusicListInfoProcess implements PageProcessor
                         userInfoList.add(userInfo);
                     }
                     offset += num[new Random().nextInt(3)] * 10;
-                    Thread.sleep(new Random().nextInt(10) * 100);
+                    Thread.sleep(new Random().nextInt(8) * 100);
                     jsonComment = commentAPI(musicInfo.getMusicid(), offset);
                     if (jsonComment == null)
                         break;
@@ -299,9 +187,9 @@ public class MusicListInfoProcess implements PageProcessor
 
         } catch (Exception e)
         {
-            System.out.println("歌曲详细信息XPath解析出现异常 " + page.getUrl() + new Date());
+            System.out.println("歌曲详细信息XPath解析出现异常" + page.getUrl());
             e.printStackTrace();
-            FileUtils.writeStrToFile(page.getUrl() + "\r\n", "E:\\ideawork\\webSpider\\src\\main\\resources\\music_error.txt");
+            FileUtils.writeStrToFile(page.getUrl() + "\r\n", "E:\\ideawork\\webSpider\\src\\main\\resources\\music_error1.txt");
         }
     }
 

@@ -1,6 +1,9 @@
 package com.webSpider.spider;
 
 
+import com.webSpider.dao.MusicInfoMapper;
+import com.webSpider.dao.MusicListInfoMapper;
+import com.webSpider.pojo.MusicListInfo;
 import com.webSpider.spider.pipeline.MusicListInfoPipeline;
 import com.webSpider.spider.process.MusicListInfoProcess;
 import com.webSpider.spider.schedule.QueueNameConstant;
@@ -14,6 +17,8 @@ import us.codecraft.webmagic.Spider;
 import utils.ConfigUtil;
 import utils.RedisUtil;
 
+import java.util.List;
+
 /**
  * @author 印佳明
  * @create 2017-10-26 19:59
@@ -25,6 +30,23 @@ public class MusicListInfoSpider implements Crawler
     @Autowired
     private MusicListInfoPipeline musicListInfoPipeline;
 
+    @Autowired
+    private MusicListInfoMapper musicListInfoMapper;
+
+    @Autowired
+    private MusicInfoMapper musicInfoMapper;
+
+    @RequestMapping(value = "selectAllTag")
+    @ResponseBody
+    public void selectAllTag()
+    {
+        List<MusicListInfo> list = musicListInfoMapper.selectAllTag();
+
+        for (MusicListInfo ls : list)
+        {
+            System.out.println(musicInfoMapper.updateByTag(ls.getTag()));
+        }
+    }
 
     @Override
     public void crawl()
@@ -49,10 +71,10 @@ public class MusicListInfoSpider implements Crawler
         //}
 
         Spider.create(new MusicListInfoProcess())
-                .addUrl("https://music.163.com/discover/playlist/?cat=华语")
+                .addUrl("http://music.163.com/discover/playlist/?cat=华语")
                 //.addUrl("https://www.douban.com/people/4400922/")
                 .addPipeline(musicListInfoPipeline)
-                .scheduler(new RedisScheduler(pool,Integer.parseInt(ConfigUtil.getProperty("redis", "redis.index")), QueueNameConstant.QUEUE_MUSICLIST_INFO))
+                .scheduler(new RedisScheduler(pool, Integer.parseInt(ConfigUtil.getProperty("redis", "redis.index")), QueueNameConstant.QUEUE_MUSICLIST_INFO))
                 .thread(1).start();
     }
 
@@ -65,14 +87,15 @@ public class MusicListInfoSpider implements Crawler
     @ResponseBody
     public String music163()
     {
-        JedisPool pool = RedisUtil.init();;//RedisUtil.init();
+        JedisPool pool = RedisUtil.init();
+        //RedisUtil.init();
         Spider.create(new MusicListInfoProcess())
-                .addUrl("http://music.163.com/discover/playlist/?cat=%E5%8D%8E%E8%AF%AD")
+                .addUrl("http://music.163.com/discover/playlist/?cat=" + ConfigUtil.getProperty("redis","musiclist.name") +"")
                 //.addUrl("http://www.douban.com/people/4400922/")
                 .addPipeline(musicListInfoPipeline)
                 //.setDownloader(new HttpClientDownloader())
-                .scheduler(new RedisScheduler(pool,Integer.parseInt(ConfigUtil.getProperty("redis", "redis.index")), QueueNameConstant.QUEUE_MUSICLIST_INFO))
+                .scheduler(new RedisScheduler(pool, Integer.parseInt(ConfigUtil.getProperty("redis", "redis.index")), QueueNameConstant.QUEUE_MUSICLIST_INFO))
                 .thread(1).start();
-        return "spider begining！！！";
+        return "spider begining!!!!!!!!!!!!!!!!!!";
     }
 }

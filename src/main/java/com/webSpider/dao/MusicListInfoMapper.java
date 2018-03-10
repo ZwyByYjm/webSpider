@@ -22,4 +22,6 @@ public interface MusicListInfoMapper  extends Mapper<MusicListInfo>
     //int updateByPrimaryKey(MusicListInfo record);
 
     List<MusicListInfo> selectByMusicListId(String musiclistid);
+
+    List<MusicListInfo> selectAllTag();
 }
