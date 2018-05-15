@@ -31,7 +31,7 @@ public class MusicInfoSpider
     @ResponseBody
     public String music163()
     {
-        File f = new File("E:\\ideawork\\webSpider\\src\\main\\resources\\music_error.txt");
+        File f = new File("G:\\ideawork\\webSpider\\src\\main\\resources\\music_error.txt");
         List<String> musicUrls = null;
         try
         {

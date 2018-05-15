@@ -189,7 +189,7 @@ public class MusicInfoProcess implements PageProcessor
         {
             System.out.println("歌曲详细信息XPath解析出现异常" + page.getUrl());
             e.printStackTrace();
-            FileUtils.writeStrToFile(page.getUrl() + "\r\n", "E:\\ideawork\\webSpider\\src\\main\\resources\\music_error1.txt");
+            FileUtils.writeStrToFile(page.getUrl() + "\r\n", "G:\\ideawork\\webSpider\\src\\main\\resources\\music_error1.txt");
         }
     }
 

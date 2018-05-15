@@ -54,7 +54,7 @@ public class MusicInfoPipeline implements Pipeline
         {
             System.out.println("插入歌曲信息数据异常:" + e.getCause());
             //FileUtils.writeStrToFile(resultItems.getRequest().getUrl()+ "\r\n","E:\\ideawork\\webSpider\\src\\main\\resources\\musiclistinfo_error.txt");
-            FileUtils.writeStrToFile(resultItems.getRequest().getUrl() + "\r\n", "E:\\ideawork\\webSpider\\src\\main\\resources\\music_error1.txt");
+            FileUtils.writeStrToFile(resultItems.getRequest().getUrl() + "\r\n", "G:\\ideawork\\webSpider\\src\\main\\resources\\music_error1.txt");
         }
 
         try
@@ -69,7 +69,7 @@ public class MusicInfoPipeline implements Pipeline
         {
             System.out.println("插入歌手信息数据异常:" + e.getCause());
             //FileUtils.writeStrToFile(resultItems.getRequest().getUrl()+ "\r\n","E:\\ideawork\\webSpider\\src\\main\\resources\\musiclistinfo_error.txt");
-            FileUtils.writeStrToFile(resultItems.getRequest().getUrl() + "\r\n", "E:\\ideawork\\webSpider\\src\\main\\resources\\music_error1.txt");
+            FileUtils.writeStrToFile(resultItems.getRequest().getUrl() + "\r\n", "G:\\ideawork\\webSpider\\src\\main\\resources\\music_error1.txt");
         }
         try
         {
@@ -83,7 +83,7 @@ public class MusicInfoPipeline implements Pipeline
         {
             System.out.println("插入专辑信息数据异常:" + e.getCause());
             //FileUtils.writeStrToFile(resultItems.getRequest().getUrl()+ "\r\n","E:\\ideawork\\webSpider\\src\\main\\resources\\musiclistinfo_error.txt");
-            FileUtils.writeStrToFile(resultItems.getRequest().getUrl() + "\r\n", "E:\\ideawork\\webSpider\\src\\main\\resources\\music_error1.txt");
+            FileUtils.writeStrToFile(resultItems.getRequest().getUrl() + "\r\n", "G:\\ideawork\\webSpider\\src\\main\\resources\\music_error1.txt");
         }
 
 
@@ -103,7 +103,7 @@ public class MusicInfoPipeline implements Pipeline
                 {
                     System.out.println("插入用户信息数据异常:" + e.getCause());
                     //FileUtils.writeStrToFile(resultItems.getRequest().getUrl()+ "\r\n","E:\\ideawork\\webSpider\\src\\main\\resources\\musiclistinfo_error.txt");
-                    FileUtils.writeStrToFile(resultItems.getRequest().getUrl() + "\r\n", "E:\\ideawork\\webSpider\\src\\main\\resources\\music_error1.txt");
+                    FileUtils.writeStrToFile(resultItems.getRequest().getUrl() + "\r\n", "G:\\ideawork\\webSpider\\src\\main\\resources\\music_error1.txt");
                 }
             }
 

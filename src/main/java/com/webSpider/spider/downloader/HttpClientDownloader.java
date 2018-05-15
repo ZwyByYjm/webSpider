@@ -103,7 +103,7 @@ public class HttpClientDownloader extends us.codecraft.webmagic.downloader.Abstr
                 return page;
             } else {
                 logger.warn("code error " + statusCode + "\t" + request.getUrl() + " IP " );
-                FileUtils.writeStrToFile(request.getUrl().toString() + "\r\n","ideawork\\webSpider\\src\\main\\resources\\download_error.txt");
+                FileUtils.writeStrToFile(request.getUrl().toString() + "\r\n","G:\\ideawork\\webSpider\\src\\main\\resources\\download_error.txt");
                 //addToCycleRetry(request, site);
 //                RedisUtil.sremove(request.getExtra("set_" + "RedisSuffix").toString(), request.getUrl().toString());
 //                System.out.println("SRemove:" + request.getExtra("set_" + "RedisSuffix").toString() + "###" +request.getUrl().toString());

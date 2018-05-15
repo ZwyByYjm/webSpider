@@ -206,7 +206,7 @@ public class MusicListInfoProcess implements PageProcessor
                     tag += tags.get(i).trim();
             }
             musicListInfo.setTag(tag);
-            musicListInfo.setIntroduction(page.getHtml().xpath("//p[@id='album-desc-more']/text()").toString().trim()
+            musicListInfo.setIntroduction(page.getHtml().xpath("//p[@id='album-desc-more']/text()") == null ? "" : page.getHtml().xpath("//p[@id='album-desc-more']/text()").toString().trim()
                     .replace("<b>", "")
                     .replace("</b>", "")
                     .replace("\"", "")
