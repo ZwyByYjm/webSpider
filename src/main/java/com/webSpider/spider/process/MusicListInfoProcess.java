@@ -2,13 +2,16 @@ package com.webSpider.spider.process;
 
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.webSpider.dao.MusicInfoMapper;
+import com.webSpider.dao.MusicListInfoMapper;
 import com.webSpider.pojo.*;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.http.HttpHost;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
@@ -16,6 +19,7 @@ import us.codecraft.webmagic.processor.PageProcessor;
 import utils.EncryptTools;
 import utils.FileUtils;
 
+import javax.annotation.PostConstruct;
 import java.math.BigInteger;
 import java.util.*;
 
@@ -23,11 +27,28 @@ import java.util.*;
  * @author 印佳明
  * @create 2017-10-26 19:59
  */
+
+@Component
 public class MusicListInfoProcess implements PageProcessor
 {
 
+    @Autowired
+    private MusicInfoMapper musicInfoMapper;
+
+    @Autowired
+    private MusicListInfoMapper musicListInfoMapper;
+
+
+    public static MusicListInfoProcess musicListInfoProcess;  // 关键2
+    @PostConstruct
+    public void init() {
+        musicListInfoProcess = this;
+    }
+
     public static final String COOKIE =
             "__s_=1; _ntes_nnid=eae5803bb40e2409e51e275e6edc32ab,1505205076692; _ntes_nuid=eae5803bb40e2409e51e275e6edc32ab; usertrack=c+xxC1nJqmQrEPdeDD4OAg==; _ga=GA1.2.577059788.1506388583; JSESSIONID-WYYY=0wK8%5C6FjZBp2BFAf%2BejvH8ok8Cv7ICwHlioNZ%2BCVTxeVemV6QOTRKsNa7i%5CC04I%2FJAj7S%5Cdjllur0uTo%2Bj87GdfYPaKqyl2ygbOYTOs57JaAWFR9DeE7A2hGVV4KDiNY8HAFtpE%2Bh8lUjwKcfxyIny%2FJKw759t7UqAUN36Xe20l1gy8d%3A1509005917212; _iuqxldmzr_=32; __utma=94650624.577059788.1506388583.1509004120.1509004120.1; __utmb=94650624.2.10.1509004120; __utmc=94650624; __utmz=94650624.1509004120.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)";
+
+
 
     // 匹配歌单列表URL
     public static final String UMUSICLIST_URL = "http://music\\.163\\.com/discover/playlist\\?cat=\\w+";
@@ -85,8 +106,6 @@ public class MusicListInfoProcess implements PageProcessor
     {
         return site;
     }
-
-
     @Override
     public void process(Page page)
     {
@@ -105,24 +124,30 @@ public class MusicListInfoProcess implements PageProcessor
             e.printStackTrace();
         }
 
-        // 当前页面是图书列表页面
+        // 当前页面是歌单列表页面
         if (page.getUrl().regex("http://music\\.163\\.com/discover/playlist/\\S+").match())
         {
             processForMusicListList(page);
         }
-        // 当前页面是图书详细信息页面
+        // 当前页面是歌单详细信息页面
         else if (page.getUrl()
                 .regex("http://music\\.163\\.com/playlist\\S+")
                 .match())
         //else if(page.getUrl().toString().indexOf("http://music.163.com/playlist/?")>0)
         {
-            processForMusicListInfo(page);
+            if (musicListInfoProcess.musicListInfoMapper.selectByMusicListId(page.getUrl().toString().split("=")[1].trim()).size() <= 0)
+                processForMusicListInfo(page);
         } else if (page.getUrl()
                 .regex("http://music\\.163\\.com/song\\S+")
                 .match())
         //else if(page.getUrl().toString().indexOf("http://music.163.com/song?id=")>0)
         {
-            processForMusicInfo(page);
+
+            if(musicListInfoProcess.musicInfoMapper.selectByMusicId(page.getUrl().toString().split("=")[1].trim()).size() <= 0)
+            {
+                processForMusicInfo(page);
+            }
+
         }
     }
 
@@ -236,7 +261,6 @@ public class MusicListInfoProcess implements PageProcessor
             MusicInfo musicInfo = new MusicInfo();
             ComposerInfo composerInfo = new ComposerInfo();
             Album album = new Album();
-            List<UserInfo> userInfoList = new ArrayList<>();
             musicInfo.setMusicid(page.getUrl().toString().split("=")[1].trim());
             musicInfo.setName(page.getHtml().xpath("//div[@class='tit']/em/text()").toString().trim());
             //musicInfo.setCreatedtime(null);//获取专辑只有设置
@@ -259,33 +283,38 @@ public class MusicListInfoProcess implements PageProcessor
             //System.out.println(page.getHtml().xpath("//span[@id='cnt_comment_count']").toString());
             int offset = 0;
             JSONObject jsonComment = commentAPI(musicInfo.getMusicid(), offset);
-            int[] num = {1, 2, 3};
-            if (jsonComment.getString("msg") == null)
-            {
-                System.out.println(page.getUrl().toString() + " *****************获取评论中************** " + new Date());
-                musicInfo.setCommentcount(Integer.parseInt(jsonComment.getString("total")));
+            // TODO: 2018/5/9 注释爬取用户信息
+            //List<UserInfo> userInfoList = new ArrayList<>();
+            //int[] num = {1, 2, 3};
+            //if (jsonComment.getString("msg") == null)
+            //{
+            //    System.out.println(page.getUrl().toString() + " *****************获取评论中************** " + new Date());
+            //    musicInfo.setCommentcount(Integer.parseInt(jsonComment.getString("total")));
+            //
+            //    while (offset < 1001 && offset < musicInfo.getCommentcount())
+            //    {
+            //        System.out.println(page.getUrl().toString() + " 获取评论：offset = " + offset + " 请稍等！！！" + new Date());
+            //        JSONArray comments = jsonComment.getJSONArray("comments");
+            //        for (int i = 0; i < comments.size(); i++)
+            //        {
+            //            JSONObject commentsJSONObject = comments.getJSONObject(i);
+            //            JSONObject jsonUser = commentsJSONObject.getJSONObject("user");
+            //            UserInfo userInfo = new UserInfo();
+            //            userInfo.setUserid(jsonUser.getString("userId"));
+            //            userInfo.setUserurl("http://music.163.com/user/home?id=" + userInfo.getUserid());
+            //            userInfo.setName(jsonUser.getString("nickname"));
+            //            userInfoList.add(userInfo);
+            //        }
+            //        offset += num[new Random().nextInt(3)] * 10;
+            //        Thread.sleep(new Random().nextInt(10) * 100);
+            //        jsonComment = commentAPI(musicInfo.getMusicid(), offset);
+            //        if (jsonComment == null)
+            //            break;
+            //    }
+            //}
+            //page.putField("userInfoList", userInfoList);
 
-                while (offset < 1001 && offset < musicInfo.getCommentcount())
-                {
-                    System.out.println(page.getUrl().toString() + " 获取评论：offset = " + offset + " 请稍等！！！" + new Date());
-                    JSONArray comments = jsonComment.getJSONArray("comments");
-                    for (int i = 0; i < comments.size(); i++)
-                    {
-                        JSONObject commentsJSONObject = comments.getJSONObject(i);
-                        JSONObject jsonUser = commentsJSONObject.getJSONObject("user");
-                        UserInfo userInfo = new UserInfo();
-                        userInfo.setUserid(jsonUser.getString("userId"));
-                        userInfo.setUserurl("http://music.163.com/user/home?id=" + userInfo.getUserid());
-                        userInfo.setName(jsonUser.getString("nickname"));
-                        userInfoList.add(userInfo);
-                    }
-                    offset += num[new Random().nextInt(3)] * 10;
-                    Thread.sleep(new Random().nextInt(10) * 100);
-                    jsonComment = commentAPI(musicInfo.getMusicid(), offset);
-                    if (jsonComment == null)
-                        break;
-                }
-            }
+
 
             //musicInfo.setEmotionid(null);
             //musicInfo.setLanguageid(null);
@@ -295,7 +324,6 @@ public class MusicListInfoProcess implements PageProcessor
             page.putField("musicInfo", musicInfo);
             page.putField("composerInfo", composerInfo);
             page.putField("album", album);
-            page.putField("userInfoList", userInfoList);
 
         } catch (Exception e)
         {
@@ -314,7 +342,7 @@ public class MusicListInfoProcess implements PageProcessor
     public JSONObject commentAPI(String musicid, int offset) throws Exception
     {
 
-       String cooke =  "_ntes_nuid=53f8777a908adc1fade5f4d408b71734; vjuids=-cc3f4d4f4.15755ef852d.0.a64594b096de3; __gads=ID=96e8a37b864614e1:T=1477567255:S=ALNI_MZDp-klfpudEJCh0C3_ErZXMm4Brw; __s_=1; NTES_CMT_USER_INFO=118404385%7C%E6%9C%89%E6%80%81%E5%BA%A6%E7%BD%91%E5%8F%8B073Hkx%7C%7Cfalse%7Cam1uY3V0QDE2My5jb20%3D; __utma=187553192.135554208.1475672367.1504746836.1505093225.13; __utmz=187553192.1505093225.13.10.utmcsr=open.163.com|utmccn=(referral)|utmcmd=referral|utmcct=/ted/; __oc_uuid=13902340-f9bc-11e6-a69c-b7ce7eb90a7c; _ntes_nnid=53f8777a908adc1fade5f4d408b71734,1506485249602; vjlast=1474615543.1508207044.11; vinfo_n_f_l_n3=dd7c1e1c7c903f37.1.20.1474615543099.1506490530904.1508207185197; usertrack=c+xxC1n22F8nk0YmAxDjAg==; _ga=GA1.2.135554208.1475672367; P_INFO=jmncut@163.com|1505093238|2|open|00&99|bej&1504142674&open#bej&null#10#0#0|156778&1|open&study|jmncut@163.com; JSESSIONID-WYYY=dIkS2jVEkXhSWroYjpJEO4Klbf6dIsex0w1jCmWX6fJZvyySw7MOp%2FhIQksmVm%2Bc2j%2BDCfobEyFnZBYrROciT4mDQUagIb4wWTxxxPxP855YBFRjmD6NSceJ9MIazQ4vZ7kvzVV9z5TwuCMlNQ5IyHNAxbhqEm1nJjEkGu8tC%5CYDnJwH%3A1511919295977; _iuqxldmzr_=32; __utma=94650624.135554208.1475672367.1511872233.1511918327.13; __utmb=94650624.2.10.1511918327; __utmc=94650624; __utmz=94650624.1493814912.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); __remember_me=true; MUSIC_U=e253743d84ed11a4aeeade41d1a92277dbda2dccfc340ef8afc61c610e10e57a657b34efc0a47cb8f6f5b8899e2fc54b8bafcdfe5ad2b092; __csrf=9b528e36a413da944ca00ea70beef1be";
+        String cooke =  "_ntes_nuid=53f8777a908adc1fade5f4d408b71734; vjuids=-cc3f4d4f4.15755ef852d.0.a64594b096de3; __gads=ID=96e8a37b864614e1:T=1477567255:S=ALNI_MZDp-klfpudEJCh0C3_ErZXMm4Brw; __s_=1; NTES_CMT_USER_INFO=118404385%7C%E6%9C%89%E6%80%81%E5%BA%A6%E7%BD%91%E5%8F%8B073Hkx%7C%7Cfalse%7Cam1uY3V0QDE2My5jb20%3D; __utma=187553192.135554208.1475672367.1504746836.1505093225.13; __utmz=187553192.1505093225.13.10.utmcsr=open.163.com|utmccn=(referral)|utmcmd=referral|utmcct=/ted/; __oc_uuid=13902340-f9bc-11e6-a69c-b7ce7eb90a7c; _ntes_nnid=53f8777a908adc1fade5f4d408b71734,1506485249602; vjlast=1474615543.1508207044.11; vinfo_n_f_l_n3=dd7c1e1c7c903f37.1.20.1474615543099.1506490530904.1508207185197; usertrack=c+xxC1n22F8nk0YmAxDjAg==; _ga=GA1.2.135554208.1475672367; P_INFO=jmncut@163.com|1505093238|2|open|00&99|bej&1504142674&open#bej&null#10#0#0|156778&1|open&study|jmncut@163.com; JSESSIONID-WYYY=dIkS2jVEkXhSWroYjpJEO4Klbf6dIsex0w1jCmWX6fJZvyySw7MOp%2FhIQksmVm%2Bc2j%2BDCfobEyFnZBYrROciT4mDQUagIb4wWTxxxPxP855YBFRjmD6NSceJ9MIazQ4vZ7kvzVV9z5TwuCMlNQ5IyHNAxbhqEm1nJjEkGu8tC%5CYDnJwH%3A1511919295977; _iuqxldmzr_=32; __utma=94650624.135554208.1475672367.1511872233.1511918327.13; __utmb=94650624.2.10.1511918327; __utmc=94650624; __utmz=94650624.1493814912.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); __remember_me=true; MUSIC_U=e253743d84ed11a4aeeade41d1a92277dbda2dccfc340ef8afc61c610e10e57a657b34efc0a47cb8f6f5b8899e2fc54b8bafcdfe5ad2b092; __csrf=9b528e36a413da944ca00ea70beef1be";
 
         if (offset % 1000 == 0)
             Thread.sleep(new Random().nextInt(30) * 50);
