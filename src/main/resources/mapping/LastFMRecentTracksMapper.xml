@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.webSpider.dao.LastFMRecentTracksMapper" >
+  <resultMap id="BaseResultMap" type="com.webSpider.pojo.LastFMRecentTracks" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user" property="user" jdbcType="VARCHAR" />
+    <result column="track_name" property="trackName" jdbcType="VARCHAR" />
+    <result column="date_text" property="dateText" jdbcType="TIMESTAMP" />
+    <result column="date_uts" property="dateUts" jdbcType="VARCHAR" />
+    <result column="preference" property="preference" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user, track_name, date_text, date_uts, preference
+  </sql>
+  <select id="selectByTrackName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from lastfm_recenttracks
+    where track_name = #{trackName,jdbcType=VARCHAR}
+  </select>
+
+
+  <select id="selectByUserAndTrack" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from lastfm_recenttracks
+    where user = #{0} and track_name = #{1}
+  </select>
+  <delete id="deleteByUser" parameterType="java.lang.String" >
+    delete from lastfm_recenttracks
+    where track_name = #{trackName,jdbcType=VARCHAR}
+  </delete>
+
+  <update id="updateByUserSelective" parameterType="com.webSpider.pojo.LastFMRecentTracks" >
+    update lastfm_recenttracks
+    <set >
+      <if test="user != null" >
+        user = #{user,jdbcType=VARCHAR},
+      </if>
+      <if test="trackName != null" >
+        track_name = #{trackName,jdbcType=VARCHAR},
+      </if>
+      <if test="dateText != null" >
+        date_text = #{dateText,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dateUts != null" >
+        date_uts = #{dateUts,jdbcType=VARCHAR},
+      </if>
+      <if test="preference != null" >
+        preference = #{preference,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

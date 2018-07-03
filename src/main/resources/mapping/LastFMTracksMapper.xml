@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.webSpider.dao.LastFMTracksMapper" >
+  <resultMap id="BaseResultMap" type="com.webSpider.pojo.LastFMTracks" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="album_text" property="albumText" jdbcType="VARCHAR" />
+    <result column="album_mbid" property="albumMbid" jdbcType="VARCHAR" />
+    <result column="artist_text" property="artistText" jdbcType="VARCHAR" />
+    <result column="artist_mbid" property="artistMbid" jdbcType="VARCHAR" />
+    <result column="mbid" property="mbid" jdbcType="VARCHAR" />
+    <result column="streamable" property="streamable" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, album_text, album_mbid, artist_text, artist_mbid, mbid, streamable, url, 
+    status
+  </sql>
+  <select id="selectByName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from lastfm_track
+    where name = #{name,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByName" parameterType="java.lang.String" >
+    delete from lastfm_track
+    where name = #{name,jdbcType=VARCHAR}
+  </delete>
+
+  <update id="updateByNameSelective" parameterType="com.webSpider.pojo.LastFMTracks" >
+    update lastfm_track
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="albumText != null" >
+        album_text = #{albumText,jdbcType=VARCHAR},
+      </if>
+      <if test="albumMbid != null" >
+        album_mbid = #{albumMbid,jdbcType=VARCHAR},
+      </if>
+      <if test="artistText != null" >
+        artist_text = #{artistText,jdbcType=VARCHAR},
+      </if>
+      <if test="artistMbid != null" >
+        artist_mbid = #{artistMbid,jdbcType=VARCHAR},
+      </if>
+      <if test="mbid != null" >
+        mbid = #{mbid,jdbcType=VARCHAR},
+      </if>
+      <if test="streamable != null" >
+        streamable = #{streamable,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+    </set>
+    where name = #{name,jdbcType=VARCHAR}
+  </update>
+
+</mapper>

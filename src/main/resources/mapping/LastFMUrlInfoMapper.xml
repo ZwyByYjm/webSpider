@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.webSpider.dao.LastFMUrlInfoMapper">
+    <resultMap id="BaseResultMap" type="com.webSpider.pojo.LastFMUrlInfo">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="perPage" property="perpage" jdbcType="VARCHAR"/>
+        <result column="total" property="total" jdbcType="VARCHAR"/>
+        <result column="totalPages" property="totalpages" jdbcType="VARCHAR"/>
+        <result column="page" property="page" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, url, perPage, total, totalPages, page
+  </sql>
+    <select id="selectByUrl" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from lastfm_urlinfo
+        where url = #{url,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByUrl" parameterType="java.lang.String">
+        delete from lastfm_urlinfo
+        where url = #{url,jdbcType=VARCHAR}
+    </delete>
+
+    <update id="updateByUrlSelective" parameterType="com.webSpider.pojo.LastFMUrlInfo">
+        update lastfm_urlinfo
+        <set>
+            <if test="url != null">
+                url = #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="perpage != null">
+                perPage = #{perpage,jdbcType=VARCHAR},
+            </if>
+            <if test="total != null">
+                total = #{total,jdbcType=VARCHAR},
+            </if>
+            <if test="totalpages != null">
+                totalPages = #{totalpages,jdbcType=VARCHAR},
+            </if>
+            <if test="page != null">
+                page = #{page,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where url = #{url,jdbcType=VARCHAR}
+    </update>
+
+
+</mapper>

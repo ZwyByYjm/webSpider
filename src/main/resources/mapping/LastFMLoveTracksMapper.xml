@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.webSpider.dao.LastFMLoveTracksMapper" >
+  <resultMap id="BaseResultMap" type="com.webSpider.pojo.LastFMLoveTracks" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user" property="user" jdbcType="VARCHAR" />
+    <result column="track_name" property="trackName" jdbcType="VARCHAR" />
+    <result column="date_text" property="dateText" jdbcType="TIMESTAMP" />
+    <result column="date_uts" property="dateUts" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user, track_name, date_text, date_uts
+  </sql>
+  <select id="selectByTrackName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from lastfm_lovedtracks
+    where track_name = #{trackName,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByUserAndTrack" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from lastfm_lovedtracks
+    where user = #{0} and track_name = #{1}
+  </select>
+
+  <delete id="deleteByTrackName" parameterType="java.lang.String" >
+    delete from lastfm_lovedtracks
+    where track_name = #{trackName,jdbcType=VARCHAR}
+  </delete>
+
+  <update id="updateByUserSelective" parameterType="com.webSpider.pojo.LastFMLoveTracks" >
+    update lastfm_lovedtracks
+    <set >
+      <if test="user != null" >
+        user = #{user,jdbcType=VARCHAR},
+      </if>
+      <if test="trackName != null" >
+        track_name = #{trackName,jdbcType=VARCHAR},
+      </if>
+      <if test="dateText != null" >
+        date_text = #{dateText,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dateUts != null" >
+        date_uts = #{dateUts,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user = #{user,jdbcType=VARCHAR}
+  </update>
+</mapper>

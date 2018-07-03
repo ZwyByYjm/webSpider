@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.webSpider.dao.LastFMUserInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.webSpider.pojo.LastFMUserInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="realname" property="realname" jdbcType="VARCHAR" />
+    <result column="age" property="age" jdbcType="VARCHAR" />
+    <result column="bootstrap" property="bootstrap" jdbcType="VARCHAR" />
+    <result column="country" property="country" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="VARCHAR" />
+    <result column="playcount" property="playcount" jdbcType="VARCHAR" />
+    <result column="playlists" property="playlists" jdbcType="VARCHAR" />
+    <result column="registered" property="registered" jdbcType="VARCHAR" />
+    <result column="subscriber" property="subscriber" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, realname, age, bootstrap, country, gender, playcount, playlists, registered, 
+    subscriber, type, url, status
+  </sql>
+  <select id="selectByName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from lastfm_userinfo
+    where name = #{name,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByName" parameterType="java.lang.String" >
+    delete from lastfm_userinfo
+    where name = #{name,jdbcType=VARCHAR}
+  </delete>
+  <update id="updateByNameSelective" parameterType="com.webSpider.pojo.LastFMUserInfo" >
+    update lastfm_userinfo
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="realname != null" >
+        realname = #{realname,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        age = #{age,jdbcType=VARCHAR},
+      </if>
+      <if test="bootstrap != null" >
+        bootstrap = #{bootstrap,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null" >
+        country = #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        gender = #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="playcount != null" >
+        playcount = #{playcount,jdbcType=VARCHAR},
+      </if>
+      <if test="playlists != null" >
+        playlists = #{playlists,jdbcType=VARCHAR},
+      </if>
+      <if test="registered != null" >
+        registered = #{registered,jdbcType=VARCHAR},
+      </if>
+      <if test="subscriber != null" >
+        subscriber = #{subscriber,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+    </set>
+    where name = #{name,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectUserSum" resultType="java.lang.Integer"  >
+    select COUNT(1)
+    from lastfm_userinfo
+  </select>
+
+
+  <select id="selectUserByStatus" resultMap="BaseResultMap" parameterType="java.lang.Integer"  >
+    select
+    <include refid="Base_Column_List" />
+    from lastfm_userinfo
+    where status = #{status,jdbcType=INTEGER}
+  </select>
+</mapper>
