@@ -28,6 +28,51 @@
     where albumid = #{albumid}
   </select>
 
+  <select id="selectAllNullComposerId" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List"/>
+    from tb_album
+    where ISNULL(composerid)
+  </select>
+  <update id="updateByAlbumIdSelective" parameterType="com.webSpider.pojo.Album">
+    update tb_album
+    <set>
+      <if test="albumid != null">
+        albumid = #{albumid,jdbcType=VARCHAR},
+      </if>
+      <if test="albumname != null">
+        albumname = #{albumname,jdbcType=VARCHAR},
+      </if>
+      <if test="composerid != null">
+        composerid = #{composerid,jdbcType=VARCHAR},
+      </if>
+      <if test="createdtime != null">
+        createdtime = #{createdtime,jdbcType=DATE},
+      </if>
+      <if test="introduction != null">
+        introduction = #{introduction,jdbcType=VARCHAR},
+      </if>
+      <if test="followedcount != null">
+        followedcount = #{followedcount,jdbcType=INTEGER},
+      </if>
+      <if test="musiccount != null">
+        musiccount = #{musiccount,jdbcType=INTEGER},
+      </if>
+      <if test="playcount != null">
+        playcount = #{playcount,jdbcType=INTEGER},
+      </if>
+      <if test="commentcount != null">
+        commentcount = #{commentcount,jdbcType=INTEGER},
+      </if>
+      <if test="forwardcount != null">
+        forwardcount = #{forwardcount,jdbcType=INTEGER},
+      </if>
+      <if test="ablumurl != null">
+        ablumurl = #{ablumurl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where albumid = #{albumid,jdbcType=VARCHAR}
+  </update>
   <!--<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >-->
     <!--select -->
     <!--<include refid="Base_Column_List" />-->

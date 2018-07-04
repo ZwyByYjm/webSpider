@@ -15,10 +15,11 @@ public interface AlbumMapper extends Mapper<Album>{
     //
     //Album selectByPrimaryKey(Integer id);
     //
-    //int updateByPrimaryKeySelective(Album record);
+    int updateByAlbumIdSelective(Album record);
     //
     //int updateByPrimaryKey(Album record);
 
 
     List<Album> selectByAlbumId(String albumid);
+    List<Album> selectAllNullComposerId();
 }

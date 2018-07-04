@@ -42,10 +42,14 @@ public class LastFMSpider {
     @Autowired
     private LastFMRecentTracksMapper lastFMRecentTracksMapper;
 
+    @Autowired
+    private ZiLastFMMusicInfoMapper ziLastFMMusicInfoMapper;
 
     @Value("${LastFM.Url}")
     private String lastFmUrl;
 
+    @Value("${Tag.Url}")
+    private String tagUrl;
 
     @RequestMapping(value = "lastFmUserInfo")
     @ResponseBody
@@ -82,7 +86,6 @@ public class LastFMSpider {
 //        lastFMUserInfoMapper.updateByNameSelective(lastFMUserInfo);
 
 
-
         return "lastFmRecentTracks end！！！";
     }
 
@@ -106,10 +109,8 @@ public class LastFMSpider {
 //        lastFMUserInfoMapper.updateByNameSelective(lastFMUserInfo);
 
 
-
         return "lastFmRecentTracks end！！！";
     }
-
 
 
     @RequestMapping(value = "lastFmLoveTracks")
@@ -127,7 +128,17 @@ public class LastFMSpider {
     }
 
 
+    @RequestMapping(value = "ziLastFmMusicTags")
+    @ResponseBody
+    public String ziLastFmMusicTags() {
+        List<ZiLastFMMusicInfo> ziLastFMMusicInfoList = ziLastFMMusicInfoMapper.selectByStatus(0);
+        System.out.println("lastFMUserInfoList " + ziLastFMMusicInfoList.size());
+        for (ZiLastFMMusicInfo ziLastFMMusicInfo : ziLastFMMusicInfoList) {
+            doGetZiMusicTag(ziLastFMMusicInfo.getArtist(), ziLastFMMusicInfo.getMusicname(), ziLastFMMusicInfo);
+        }
 
+        return "lastFmLoveTracks end！！！";
+    }
 
     private int doGetUserInfo(String method, String user, String api_key, String page) {
         int selectUserSum = lastFMUserInfoMapper.selectUserSum();
@@ -209,7 +220,7 @@ public class LastFMSpider {
 
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 StringBuilder get = new StringBuilder();
-                System.out.println("httpURLConnection.getResponseCode() : " + httpURLConnection.getResponseCode() +" time :" + new Date());
+                System.out.println("httpURLConnection.getResponseCode() : " + httpURLConnection.getResponseCode() + " time :" + new Date());
                 if (httpURLConnection.getResponseCode() == 200) {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream(), "UTF-8"));
                     String read;
@@ -239,7 +250,7 @@ public class LastFMSpider {
                         for (Object trackJson : trackArr) {
 
                             Calendar c = Calendar.getInstance();
-                            if (JSON.parseObject(trackJson.toString()).getString("date")!=null) {
+                            if (JSON.parseObject(trackJson.toString()).getString("date") != null) {
                                 c.setTime(new Date(Long.parseLong(
                                         JSON.parseObject(
                                                 JSON.parseObject(trackJson.toString()).getString("date"))
@@ -269,8 +280,8 @@ public class LastFMSpider {
                             LastFMRecentTracks lastFMRecentTracks = new LastFMRecentTracks();
                             lastFMRecentTracks.setTrackName(lastFMTracks.getName());
 
-                            if (JSON.parseObject(trackJson.toString()).getString("date")!=null) {
-                                lastFMRecentTracks.setDateText(new Date(Long.parseLong(JSON.parseObject(JSON.parseObject(trackJson.toString()).getString("date")).getString("uts")+"000")-288000000));
+                            if (JSON.parseObject(trackJson.toString()).getString("date") != null) {
+                                lastFMRecentTracks.setDateText(new Date(Long.parseLong(JSON.parseObject(JSON.parseObject(trackJson.toString()).getString("date")).getString("uts") + "000") - 288000000));
                             }
                             lastFMRecentTracks.setDateUts(lastFMTracks.getName());
                             lastFMRecentTracks.setUser(user);
@@ -384,6 +395,48 @@ public class LastFMSpider {
         } catch (IOException e) {
             e.printStackTrace();
             return 0;
+        }
+    }
+
+    private void doGetZiMusicTag(String artist, String track, ZiLastFMMusicInfo ziLastFMMusicInfo) {
+
+        try {
+            String tagUrlStr = String.format(tagUrl, "track.getInfo", "c17e237aa0b58a995217ec8a479d3132", artist, track);
+
+            System.out.println("******************tagUrlStr begin : " + tagUrlStr + "*********** ");
+            URL url = new URL(tagUrlStr);
+            if (lastFMUrlInfoMapper.selectByUrl(tagUrlStr).size() <= 0) {
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                StringBuilder get = new StringBuilder();
+                System.out.println("httpURLConnection.getResponseCode() : " + httpURLConnection.getResponseCode() + "时间 ：" + new Date());
+                if (httpURLConnection.getResponseCode() == 200) {
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream(), "UTF-8"));
+                    String read;
+                    while (((read = bufferedReader.readLine())) != null) {
+                        get.append(read + "\r\n");
+                    }
+                    JSONObject jsonObject = JSON.parseObject(get.toString());
+                    if (jsonObject.size() == 0||jsonObject.getString("track")==null)
+                        return;
+
+                    JSONArray toptags = JSON.parseArray(JSON.parseObject(JSON.parseObject(jsonObject.getString("track")).getString("toptags")).getString("tag"));
+                    if (toptags.size() > 0) {
+                        StringBuilder tags = new StringBuilder();
+                        for (Object tagJson : toptags) {
+                            System.out.println("lastFMTracks begin ");
+                            tags.append(JSON.parseObject(tagJson.toString()).getString("name") + "$");
+                        }
+                        ziLastFMMusicInfo.setTagname(tags.toString());
+                    }
+                    ziLastFMMusicInfo.setStatus(1);
+                    ziLastFMMusicInfoMapper.updateByMusicNameSelective(ziLastFMMusicInfo);
+                }else{
+                    ziLastFMMusicInfo.setStatus(2);
+                    ziLastFMMusicInfoMapper.updateByMusicNameSelective(ziLastFMMusicInfo);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

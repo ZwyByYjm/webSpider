@@ -108,7 +108,7 @@
         <!--<table tableName="lastfm_track" domainObjectName="LastFMTracks" enableCountByExample="false"-->
                <!--enableUpdateByExample="false" enableDeleteByExample="false"-->
                <!--enableSelectByExample="false" selectByExampleQueryId="false"/>-->
-        <table tableName="lastfm_urlinfo" domainObjectName="LastFMUrlInfo" enableCountByExample="false"
+        <table tableName="zi_lastfm_musicinfo" domainObjectName="ZiLastFMMusicInfo" enableCountByExample="false"
                enableUpdateByExample="false" enableDeleteByExample="false"
                enableSelectByExample="false" selectByExampleQueryId="false"/>
         <!--<table tableName="lastfm_userinfo" domainObjectName="LastFMUserInfo" enableCountByExample="false"-->
