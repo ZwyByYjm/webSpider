@@ -90,6 +90,7 @@ public class AlbumProcess implements PageProcessor {
         try {
             site.setUserAgent(AGENTS[new Random().nextInt(5)])
                     .addCookie("Cookie", COOKIE);
+            Thread.sleep(new Random().nextInt(5) * 1000);
         } catch (Exception e) {
             e.printStackTrace();
         }
