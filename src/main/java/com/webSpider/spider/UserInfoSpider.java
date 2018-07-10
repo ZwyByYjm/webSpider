@@ -59,7 +59,7 @@ public class UserInfoSpider implements Crawler
                 .addUrl("http://music.163.com/user/home?id=119543810")
                 //.addUrl("https://www.douban.com/people/4400922/")
                 .addPipeline(userInfoPipeline)
-                //.setDownloader(new HttpClientDownloader())
+                //.setDownloader(new GetData())
                 .thread(1).start();
         return "爬虫开始";
     }

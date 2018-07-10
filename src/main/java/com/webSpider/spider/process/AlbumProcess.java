@@ -1,8 +1,10 @@
 package com.webSpider.spider.process;
 
 
+import com.webSpider.dao.AlbumMapper;
 import com.webSpider.pojo.Album;
 import org.apache.http.HttpHost;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
@@ -27,6 +29,8 @@ public class AlbumProcess implements PageProcessor {
 
     public static AlbumProcess musicListInfoProcess;  // 关键2
 
+    @Autowired
+    private AlbumMapper albumMapper;
     @PostConstruct
     public void init() {
         musicListInfoProcess = this;
@@ -120,7 +124,11 @@ public class AlbumProcess implements PageProcessor {
 
             System.out.println("******结束爬取专辑信息 " + page.getUrl().toString() + " *******" + new Date());
         } catch (Exception e) {
-            System.out.println("歌曲详细信息XPath解析出现异常 " + page.getUrl() + new Date());
+            System.out.println("专辑详细信息XPath解析出现异常 " + page.getUrl() + new Date());
+            Album album = new Album();
+            album.setComposerid(page.getUrl().toString().split("=")[1]);
+            album.setIntroduction("404");
+            albumMapper.updateByAlbumIdSelective(album);
             e.printStackTrace();
             FileUtils.writeStrToFile(page.getUrl() + "\r\n", "E:\\ideawork\\webSpider\\src\\main\\resources\\music_error.txt");
         }

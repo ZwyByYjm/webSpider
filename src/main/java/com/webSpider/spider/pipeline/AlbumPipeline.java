@@ -33,6 +33,10 @@ public class AlbumPipeline implements Pipeline {
 
             } catch (Exception e) {
                 System.out.println("更新专辑信息数据异常:" + e.getCause());
+                Album album = new Album();
+                album.setComposerid(resultItems.getRequest().getUrl().split("=")[1]);
+                album.setIntroduction("error");
+                albumMapper.updateByAlbumIdSelective(album);
                 RedisUtil.push(QueueNameConstant.QUEUE_ALBUM_ERROR, resultItems.getRequest().getUrl());
                 //FileUtils.writeStrToFile(resultItems.getRequest().getUrl()+ "\r\n","E:\\ideawork\\webSpider\\src\\main\\resources\\musiclistinfo_error.txt");
             }

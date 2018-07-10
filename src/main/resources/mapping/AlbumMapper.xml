@@ -32,7 +32,7 @@
     select
     <include refid="Base_Column_List"/>
     from tb_album
-    where ISNULL(composerid)
+    where ISNULL(composerid) and ISNULL(introduction)
   </select>
   <update id="updateByAlbumIdSelective" parameterType="com.webSpider.pojo.Album">
     update tb_album

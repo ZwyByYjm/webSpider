@@ -1,4 +1,4 @@
-package com.webSpider.spider.schedule;
+package com.webSpider.spider;
 
 import com.webSpider.dao.AlbumMapper;
 import com.webSpider.pojo.Album;
