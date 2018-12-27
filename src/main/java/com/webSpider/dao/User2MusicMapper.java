@@ -1,17 +1,13 @@
 package com.webSpider.dao;
 
 import com.webSpider.pojo.User2Music;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+import tk.mybatis.mapper.common.Mapper;
 
-public interface User2MusicMapper {
-    int deleteByPrimaryKey(Integer id);
+import java.util.List;
 
-    int insert(User2Music record);
-
-    int insertSelective(User2Music record);
-
-    User2Music selectByPrimaryKey(Integer id);
-
-    int updateByPrimaryKeySelective(User2Music record);
-
-    int updateByPrimaryKey(User2Music record);
+@Repository
+public interface User2MusicMapper extends Mapper<User2Music> {
+    List<User2Music> selectByUseridAndMusicid(@Param("userid")String userid,@Param("musicid")String musicid);
 }

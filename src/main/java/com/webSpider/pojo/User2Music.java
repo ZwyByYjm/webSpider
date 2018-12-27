@@ -43,4 +43,14 @@ public class User2Music {
     public void setRatio(String ratio) {
         this.ratio = ratio == null ? null : ratio.trim();
     }
+
+    @Override
+    public String toString() {
+        return "User2Music{" +
+                "id=" + id +
+                ", userid='" + userid + '\'' +
+                ", musicid='" + musicid + '\'' +
+                ", ratio='" + ratio + '\'' +
+                '}';
+    }
 }

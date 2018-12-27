@@ -231,7 +231,8 @@ public class MusicInfoProcess implements PageProcessor
         //评论获取
         Document document = Jsoup.connect("http://music.163.com/weapi/v1/resource/comments/R_SO_4_" + musicid + "?csrf_token=4eef1bc804a5b1f3b3c85366e404f583")
                 .cookie("Cookie", cooke).userAgent(AGENTS[new Random().nextInt(6)])
-                .header("Referer", "http://music.163.com/song?id=" + musicid).data("params", params)
+                .header("Referer", "http://music.163.com/song?id=" + musicid)
+                .data("params", params)
                 .data("encSecKey", encSecKey)
                 .header("Accept-Encoding", "gzip, deflate")
                 .header("Accept-Language", "zh-CN,zh;q=0.8,en;q=0.6")

@@ -10,73 +10,12 @@
   <sql id="Base_Column_List" >
     id, userid, musicid, ratio
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
+
+  <!-- 根据Userid查询用户 -->
+  <select id="selectByUseridAndMusicid" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List"/>
     from tb_user_music
-    where id = #{id,jdbcType=INTEGER}
+    where userid = #{userid} AND musicid = #{musicid}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from tb_user_music
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" parameterType="com.webSpider.pojo.User2Music" >
-    insert into tb_user_music (id, userid, musicid, 
-      ratio)
-    values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=VARCHAR}, #{musicid,jdbcType=VARCHAR}, 
-      #{ratio,jdbcType=VARCHAR})
-  </insert>
-  <insert id="insertSelective" parameterType="com.webSpider.pojo.User2Music" >
-    insert into tb_user_music
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="userid != null" >
-        userid,
-      </if>
-      <if test="musicid != null" >
-        musicid,
-      </if>
-      <if test="ratio != null" >
-        ratio,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="userid != null" >
-        #{userid,jdbcType=VARCHAR},
-      </if>
-      <if test="musicid != null" >
-        #{musicid,jdbcType=VARCHAR},
-      </if>
-      <if test="ratio != null" >
-        #{ratio,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.webSpider.pojo.User2Music" >
-    update tb_user_music
-    <set >
-      <if test="userid != null" >
-        userid = #{userid,jdbcType=VARCHAR},
-      </if>
-      <if test="musicid != null" >
-        musicid = #{musicid,jdbcType=VARCHAR},
-      </if>
-      <if test="ratio != null" >
-        ratio = #{ratio,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.webSpider.pojo.User2Music" >
-    update tb_user_music
-    set userid = #{userid,jdbcType=VARCHAR},
-      musicid = #{musicid,jdbcType=VARCHAR},
-      ratio = #{ratio,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
 </mapper>
