@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface User2MusicMapper extends Mapper<User2Music> {
     List<User2Music> selectByUseridAndMusicid(@Param("userid")String userid,@Param("musicid")String musicid);
+    List<User2Music> selectByUserid(String userid);
 }

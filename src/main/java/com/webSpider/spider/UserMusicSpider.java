@@ -3,6 +3,7 @@ package com.webSpider.spider;
 
 import com.webSpider.dao.User2MusicMapper;
 import com.webSpider.dao.UserInfoMapper;
+import com.webSpider.pojo.User2Music;
 import com.webSpider.spider.pipeline.UserMusicPipeline;
 import com.webSpider.spider.process.UserMusicProcess;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,16 +47,25 @@ public class UserMusicSpider implements Crawler {
     public String music163() {
 
         for (int i = 1; ; i++) {
-            Map<String,Integer> map = new HashMap<>();
-            map.put("pageBegin",(i-1)*100);
-            map.put("pageEnd",i*100);
+            Map<String, Integer> map = new HashMap<>();
+            map.put("pageBegin", (i - 1) * 100);
+            map.put("pageEnd", i * 100);
             List<Integer> list = userInfoMapper.selectUserByPageNum(map);
-            if (Objects.isNull(list)||list.size()==0){
+            if (Objects.isNull(list) || list.size() == 0) {
                 break;
             }
             String[] urls = new String[list.size()];
-            for (int j = 0;j < list.size();j++){
-                urls[j]="https://music.163.com/#/user/songs/rank?id="+list.get(j);
+            boolean urlsIsEmpty = true;
+            for (int j = 0; j < list.size(); j++) {
+                List<User2Music> user2Musics = user2MusicMapper.selectByUserid(String.valueOf(list.get(j)));
+                if (Objects.isNull(user2Musics) || user2Musics.size() <= 0) {
+                    urls[j] = "https://music.163.com/#/user/songs/rank?id=" + list.get(j);
+                    urlsIsEmpty = false;
+                }
+            }
+
+            if (urlsIsEmpty) {
+                break;
             }
 
             Spider.create(new UserMusicProcess())

@@ -12,6 +12,12 @@
   </sql>
 
   <!-- 根据Userid查询用户 -->
+  <select id="selectByUserid" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List"/>
+    from tb_user_music
+    where userid = #{userid}
+  </select>
   <select id="selectByUseridAndMusicid" resultMap="BaseResultMap" parameterType="java.lang.String">
     select
     <include refid="Base_Column_List"/>
