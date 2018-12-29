@@ -3,7 +3,6 @@ package com.webSpider.spider;
 
 import com.webSpider.dao.User2MusicMapper;
 import com.webSpider.dao.UserInfoMapper;
-import com.webSpider.pojo.User2Music;
 import com.webSpider.spider.pipeline.UserMusicPipeline;
 import com.webSpider.spider.process.UserMusicProcess;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,17 +54,8 @@ public class UserMusicSpider implements Crawler {
                 break;
             }
             String[] urls = new String[list.size()];
-            boolean urlsIsEmpty = true;
             for (int j = 0; j < list.size(); j++) {
-                List<User2Music> user2Musics = user2MusicMapper.selectByUserid(String.valueOf(list.get(j)));
-                if (Objects.isNull(user2Musics) || user2Musics.size() <= 0) {
                     urls[j] = "https://music.163.com/#/user/songs/rank?id=" + list.get(j);
-                    urlsIsEmpty = false;
-                }
-            }
-
-            if (urlsIsEmpty) {
-                break;
             }
 
             Spider.create(new UserMusicProcess())

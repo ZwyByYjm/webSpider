@@ -24,6 +24,16 @@
   </select>
 
   <select id="selectUserByPageNum" resultType="java.lang.String" parameterType="java.util.HashMap">
-    SELECT userid from tb_userinfo WHERE userid NOT IN ( SELECT userid from tb_user_music) LIMIT #{pageBegin} , #{pageEnd}
+    SELECT userid from tb_userinfo WHERE (level != -1 or level is null) AND userid NOT IN ( SELECT DISTINCT userid from tb_user_music) LIMIT #{pageBegin} , #{pageEnd}
   </select>
+
+  <update id="updateByUserIdAndLevel" parameterType="java.util.HashMap">
+    update tb_userinfo
+    <set >
+      level = #{level,VARCHAR}
+    </set>
+    where userid = #{userid,jdbcType=VARCHAR}
+  </update>
+
+
 </mapper>

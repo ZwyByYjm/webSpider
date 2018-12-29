@@ -76,6 +76,9 @@ public class UserMusicProcess implements PageProcessor {
             List<Album> albumList = new ArrayList<>();
             JSONObject jsonRecord = recordAPI(userno);
             JSONArray allData = jsonRecord.getJSONArray("allData");
+            if (Objects.isNull(allData)||allData.size()<=0){
+                page.putField("userno",userno);
+            }
             for (int i = 0; !Objects.isNull(allData) && i < allData.size(); i++) {
                 JSONObject recordJSONObject = allData.getJSONObject(i);
 
