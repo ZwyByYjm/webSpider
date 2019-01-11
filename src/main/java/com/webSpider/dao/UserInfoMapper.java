@@ -11,6 +11,8 @@ import java.util.Map;
 public interface UserInfoMapper extends Mapper<UserInfo>
 {
     List<UserInfo> selectByUserid(String userid);
+
     List<Integer> selectUserByPageNum(Map map);
+
     Integer updateByUserIdAndLevel(Map map);
 }

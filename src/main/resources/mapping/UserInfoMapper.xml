@@ -1,37 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.webSpider.dao.UserInfoMapper">
-  <resultMap id="BaseResultMap" type="com.webSpider.pojo.UserInfo">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="userid" jdbcType="VARCHAR" property="userid" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="sex" jdbcType="VARCHAR" property="sex" />
-    <result column="level" jdbcType="INTEGER" property="level" />
-    <result column="listensongscount" jdbcType="INTEGER" property="listensongscount" />
-    <result column="followscount" jdbcType="INTEGER" property="followscount" />
-    <result column="fanscount" jdbcType="INTEGER" property="fanscount" />
-    <result column="userurl" jdbcType="VARCHAR" property="userurl" />
-  </resultMap>
-  <sql id="Base_Column_List">
+    <resultMap id="BaseResultMap" type="com.webSpider.pojo.UserInfo">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="userid" jdbcType="VARCHAR" property="userid"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="sex" jdbcType="VARCHAR" property="sex"/>
+        <result column="level" jdbcType="INTEGER" property="level"/>
+        <result column="listensongscount" jdbcType="INTEGER" property="listensongscount"/>
+        <result column="followscount" jdbcType="INTEGER" property="followscount"/>
+        <result column="fanscount" jdbcType="INTEGER" property="fanscount"/>
+        <result column="userurl" jdbcType="VARCHAR" property="userurl"/>
+    </resultMap>
+    <sql id="Base_Column_List">
     id, userid, name, sex, level, listensongscount, followscount, fanscount, userurl
   </sql>
-  <!-- 根据Userid查询用户 -->
-  <select id="selectByUserid" resultMap="BaseResultMap" parameterType="java.lang.String">
-    select
-    <include refid="Base_Column_List"/>
-    from tb_userinfo
-    where userid = #{userid}
-  </select>
+    <!-- 根据Userid查询用户 -->
+    <select id="selectByUserid" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_userinfo
+        where userid = #{userid}
+    </select>
 
-  <select id="selectUserByPageNum" resultType="java.lang.String" parameterType="java.util.HashMap">
+    <select id="selectUserByPageNum" resultType="java.lang.String" parameterType="java.util.HashMap">
     SELECT userid from tb_userinfo WHERE (level != -1 or level is null) AND userid NOT IN ( SELECT DISTINCT userid from tb_user_music) LIMIT #{pageBegin} , #{pageEnd}
   </select>
 
-  <update id="updateByUserIdAndLevel" parameterType="java.util.HashMap">
+    <update id="updateByUserIdAndLevel" parameterType="java.util.HashMap">
     update tb_userinfo
-    <set >
-      level = #{level,VARCHAR}
-    </set>
+    set level = -1
     where userid = #{userid,jdbcType=VARCHAR}
   </update>
 
