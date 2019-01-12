@@ -101,6 +101,13 @@
   </select>
 
   <select id="selectMusicIdByPageNum" resultType="java.lang.String" parameterType="java.util.HashMap">
-    SELECT musicid from cle_musicinfo_temp1 WHERE name IS NULL LIMIT #{pageBegin} , #{pageEnd}
+    SELECT musicid from cle_musicinfo_temp1 WHERE composerid is NULL OR name IS NULL LIMIT #{pageBegin} , #{pageEnd}
   </select>
+
+  <update id="updateByMusicId" parameterType="com.webSpider.pojo.CleMusicInfoTemp1" >
+    update cle_musicinfo_temp1
+    set  name = #{name,jdbcType=VARCHAR},
+    composerid = #{composerid,jdbcType=VARCHAR}
+    where musicid = #{musicid,jdbcType=VARCHAR}
+  </update>
 </mapper>

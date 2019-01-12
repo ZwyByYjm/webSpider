@@ -25,4 +25,5 @@ public interface CleMusicInfoTemp1Mapper  extends Mapper<CleMusicInfoTemp1> {
     List<Integer> selectMusicIdByPageNum(Map map);
 
     List<CleMusicInfoTemp1> selectByMusicId(String musicid);
+    Integer updateByMusicId(CleMusicInfoTemp1 cleMusicInfoTemp1);
 }
